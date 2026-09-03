@@ -1,0 +1,13 @@
+services:
+  goatcounter:
+    image: arp242/goatcounter:2.7.0
+    container_name: goatcounter
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1019:8080"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /home/goatcounter/goatcounter-data
+        bind:
+          create_host_path: false
