@@ -1,0 +1,17 @@
+# Environment / secrets
+.env
+**/.env
+
+# Runtime data
+**/backups/
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
