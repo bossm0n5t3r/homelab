@@ -4,11 +4,11 @@ Real-time system and container monitoring for the home server.
 
 ## Access
 
-Open:
+Open the dashboard at:
 
     http://<server-ip>:1021
 
-Netdata does not require authentication for its local dashboard by default.
+The local dashboard does not require authentication by default.
 
 Allow TCP port `1021` only from a trusted LAN or VPN, and do not expose it directly to the internet.
 
@@ -33,7 +33,7 @@ Update to the latest stable image:
 
 ## Storage
 
-Configuration, metrics, and cache data are stored in Docker named volumes:
+Netdata stores its configuration, metrics, and cache in Docker named volumes:
 
 - `netdataconfig` at `/etc/netdata`
 - `netdatalib` at `/var/lib/netdata`
@@ -45,19 +45,26 @@ Use `docker compose down --volumes` only when the stored configuration and metri
 
 ## Host integration
 
-The service uses host PID and network namespaces, host filesystem mounts, the Docker socket, `SYS_PTRACE`, `SYS_ADMIN`,
-and an unconfined AppArmor profile.
+Full host monitoring requires:
 
-These settings follow Netdata's full host-monitoring setup for Docker on Ubuntu, but give the container extensive
-visibility into the host.
+- Host PID and network namespaces
+- Read-only access to the host filesystem, process information, system information, logs, and D-Bus
+- The Docker socket bind-mounted read-only for container discovery
+- `SYS_PTRACE` and `SYS_ADMIN` capabilities
+- An unconfined AppArmor profile
+- `NET_BIND_SERVICE` because port `1021` is below `1024`
 
+These settings are based on Netdata's host-monitoring setup for Docker on Ubuntu and give the container extensive
+visibility into the host. Access to the Docker socket remains security-sensitive even when the bind mount is read-only.
 Only run the trusted official image.
 
-Port `1021` is below `1024`, so the `NET_BIND_SERVICE` capability is required.
+### Mount propagation
 
-The `/run/dbus` mount enables systemd unit monitoring, and the Docker socket mount enables container discovery.
+The host root is mounted without recursive slave propagation (`rslave`) for compatibility with this host. As a result,
+filesystems mounted or unmounted on the host after the container starts may not be reflected inside the container.
+Restart Netdata after changing host mounts:
 
-Access to the Docker socket is security-sensitive even when the bind mount is marked read-only.
+    docker compose restart netdata
 
 ## References
 
