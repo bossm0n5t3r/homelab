@@ -7,6 +7,7 @@ Configuration for self-hosted services running on my home server.
 ### Active
 
 - GoatCounter - lightweight web analytics
+- Beszel - lightweight server monitoring
 
 ### Unused
 
