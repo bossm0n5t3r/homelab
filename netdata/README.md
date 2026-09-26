@@ -6,11 +6,11 @@ Real-time system and container monitoring for the home server.
 
 Open the dashboard at:
 
-    http://<server-ip>:1021
+    http://<server-ip>:PORT
 
 The local dashboard does not require authentication by default.
 
-Allow TCP port `1021` only from a trusted LAN or VPN, and do not expose it directly to the internet.
+Allow TCP port `PORT` only from a trusted LAN or VPN, and do not expose it directly to the internet.
 
 ## Commands
 
@@ -52,7 +52,7 @@ Full host monitoring requires:
 - The Docker socket bind-mounted read-only for container discovery
 - `SYS_PTRACE` and `SYS_ADMIN` capabilities
 - An unconfined AppArmor profile
-- `NET_BIND_SERVICE` because port `1021` is below `1024`
+- `NET_BIND_SERVICE` when `PORT` is set below `1024`
 
 These settings are based on Netdata's host-monitoring setup for Docker on Ubuntu and give the container extensive
 visibility into the host. Access to the Docker socket remains security-sensitive even when the bind mount is read-only.
